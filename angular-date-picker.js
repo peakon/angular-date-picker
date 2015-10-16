@@ -64,7 +64,7 @@
                     });
                 }
 
-                for (var i = 0; i < 7; i++) {
+                for (var i = 1; i <= 7; i++) {
                     var day = $locale.DATETIME_FORMATS.DAY[(i + firstDayOfWeek) % 7];
 
                     daysOfWeek.push({
@@ -98,7 +98,7 @@
                         daysInMonth = lastDayOfMonth.getDate(),
                         daysInLastMonth = lastDayOfPreviousMonth.getDate(),
                         dayOfWeek = firstDayOfMonth.getDay(),
-                        leadingDays = (dayOfWeek - firstDayOfWeek + 7) % 7 || 7; // Ensure there are always leading days to give context
+                        leadingDays = (dayOfWeek - firstDayOfWeek + 6) % 7 || 7; // Ensure there are always leading days to give context
 
                     $scope.leadingDays = days.slice(- leadingDays - (31 - daysInLastMonth), daysInLastMonth);
                     $scope.days = days.slice(0, daysInMonth);
