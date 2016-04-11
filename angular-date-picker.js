@@ -28,9 +28,9 @@
 + '    </div>'
 + '    <div class="_days" ng-click="pickDay($event)">'
 + '        <div class="_day-of-week" ng-repeat="dayOfWeek in daysOfWeek" title="{{ dayOfWeek.fullName }}">{{ dayOfWeek.firstLetter }}</div>'
-+ '        <div class="_day -padding" ng-repeat="day in leadingDays" data-month-offset="-1">{{ day }}</div>'
-+ '        <div class="_day" ng-repeat="day in days" ng-class="{ \'-selected\': (day === selectedDay), \'-today\': (day === today) }">{{ day }}</div>'
-+ '        <div class="_day -padding" ng-repeat="day in trailingDays" data-month-offset="1">{{ day }}</div>'
++ '        <div class="_day -padding" ng-repeat="day in leadingDays" data-month-offset="-1" ng-class="{\'disabled\': isDisabled(day, -1)}">{{ day }} </div>'
++ '        <div class="_day" ng-repeat="day in days" ng-class="{ \'-selected\': (day === selectedDay), \'-today\': (day === today), \'disabled\': isDisabled(day)}">{{ day }}</div>'
++ '        <div class="_day -padding" ng-repeat="day in trailingDays" data-month-offset="1" ng-class="{\'disabled\': isDisabled(day, 1)}">{{ day }}</div>'
 + '    </div>'
 + '</div>'
         ;
@@ -157,6 +157,26 @@
                         $scope.onDateSelected();
                     }
                 };
+
+                $scope.isDisabled = function (day, offset) {
+                    offset = offset || 0;
+
+                    if ($attributes.minDate) {
+                        var minDate = new Date($attributes.minDate);
+                        if (new Date($scope.year, $scope.month + offset, day) < minDate) {
+                            return true;
+                        }
+                    }
+
+                    if ($attributes.maxDate) {
+                        var maxDate = new Date($attributes.maxDate);
+                        if (new Date($scope.year, $scope.month + offset, day) > maxDate) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             }
         };
     }]);

@@ -69,3 +69,7 @@
     clear: left;
     height: 0;
 }
+.angular-date-picker > ._days .disabled {
+    opacity: .25 !important;
+    pointer-events: none;
+}
