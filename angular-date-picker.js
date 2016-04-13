@@ -15,6 +15,23 @@
 }(this, function (angular) {
     'use strict';
 
+    function parseIsoDate(dateStringInRange) {
+        var isoExp = /^\s*(\d{4})-(\d\d)-(\d\d)\s*$/,
+            date = new Date(NaN), month,
+            parts = isoExp.exec(dateStringInRange);
+
+        if (parts) {
+            month = +parts[2];
+            date.setFullYear(parts[1], month - 1, parts[3]);
+
+            if (month !== date.getMonth() + 1) {
+                date.setTime(NaN);
+            }
+        }
+
+        return date;
+    }
+
     return angular.module('mp.datePicker', []).directive('datePicker', [ '$window', '$locale', function ($window, $locale) {
         // Introduce custom elements for IE8
         $window.document.createElement('date-picker');
@@ -134,6 +151,10 @@
                 $scope.pickDay = function (evt) {
                     var target = angular.element(evt.target);
 
+                    if (target[0].querySelectorAll('.disabled').length > 0 || target[0].className.indexOf('disabled') !== -1) {
+                        return;
+                    }
+
                     if (target.hasClass('_day')) {
                         var monthOffset = target.attr('data-month-offset');
 
@@ -162,7 +183,7 @@
                     offset = offset || 0;
 
                     if ($attributes.minDate) {
-                        var minDate = new Date($attributes.minDate);
+                        var minDate = parseIsoDate($attributes.minDate);
                         if (new Date($scope.year, $scope.month + offset, day) < minDate) {
                             return true;
                         }
